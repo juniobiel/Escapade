@@ -10,8 +10,12 @@ public class sala1 : MonoBehaviour
     public GameObject lampada;
     public GameObject chave;
     public GameObject porta;
+    public GameObject raioLuz;
+
     Transform chaveX;
     public bool temChave = false;
+    public bool luz = false;
+    public int cont;
     Vector3 chavePos = new Vector3(18, 0, 0);
 
 
@@ -28,6 +32,27 @@ public class sala1 : MonoBehaviour
     void Update()
     {
         chaveX = chave.GetComponent<Transform>();
+
+        if(luz == true)
+        {
+            cont++;
+
+            if(cont >= 5)
+            {
+                raioLuz.SetActive(false);
+            }
+
+            if (cont >= 9)
+            {
+                raioLuz.SetActive(true);
+            }
+
+            if (cont >= 19)
+            {
+                raioLuz.SetActive(false);
+            }
+
+        }
 
     }
 
@@ -49,6 +74,9 @@ public class sala1 : MonoBehaviour
             chaveX.transform.position = chavePos;
 
             temChave = true;
+
+            raioLuz.SetActive(true);
+            luz = true;
         }
 
     }
