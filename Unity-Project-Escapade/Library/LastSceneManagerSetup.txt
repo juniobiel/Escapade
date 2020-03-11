@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Cenas/Sala de Limpeza.unity
+- path: Assets/Cenas/Escola.unity
   isLoaded: 1
   isActive: 1
