@@ -17,7 +17,7 @@ public class portaSala1 : MonoBehaviour
     {
         if(abrir == true)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, -120, 0), 2 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, -180, 0), 2 * Time.deltaTime);
         }
     }
 
