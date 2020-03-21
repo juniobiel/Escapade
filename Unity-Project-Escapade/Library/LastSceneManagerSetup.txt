@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Escola.unity
+- path: Assets/Scenes/MenuPrincipal.unity
   isLoaded: 1
   isActive: 1

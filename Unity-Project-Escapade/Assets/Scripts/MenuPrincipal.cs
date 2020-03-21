@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MenuPrincipal : MonoBehaviour
 {
     public Text startText;
+    public AudioClip transitionSound;
 
     string texto1, texto2, texto3;
 
@@ -24,6 +25,7 @@ public class MenuPrincipal : MonoBehaviour
         texto3 = startText.text;
         texto2 = "Pressione para iniciar..";
         texto1 = "Pressione para iniciar.";
+
     }
 
     // Update is called once per frame
@@ -38,9 +40,20 @@ public class MenuPrincipal : MonoBehaviour
 
         if (contador >= 1.5f && Input.anyKeyDown)
         {
-            SceneManager.LoadScene("Escola", LoadSceneMode.Single);
+            gameObject.GetComponent<AudioSource>().clip = transitionSound;
+            gameObject.GetComponent<AudioSource>().Play();
+
+            StartCoroutine(SceneTransitionPause());
+
         }
         
+    }
+
+    IEnumerator SceneTransitionPause()
+    {
+        yield return new WaitForSeconds(1.75f);
+
+        SceneManager.LoadScene("Escola", LoadSceneMode.Single);
     }
 
     void AnimarTexto()
