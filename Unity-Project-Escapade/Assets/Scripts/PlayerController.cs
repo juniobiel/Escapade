@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public float RunSpeed;
     public float sensibility;
 
+    public bool portaAberta = false;
+
     [Header("Imports")]
     public Camera cam;
 
@@ -20,6 +22,15 @@ public class PlayerController : MonoBehaviour
     private Vector3 rotation;
     private Vector3 camRotation;
     private float rotCam;
+
+
+    public bool pegouLanterna = false;
+    public GameObject lanterna;
+    public GameObject Luz;
+    public GameObject lanternaFake;
+    public bool luzOff = false;
+    public int bateria = 0;
+    public int tempoBateria = 0;
 
     void Start()
     {
@@ -70,6 +81,55 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
+
+        if(pegouLanterna == true)
+        {
+            lanterna.SetActive(true);
+            lanternaFake.SetActive(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            if (bateria <= 0 && tempoBateria <= 0)
+            {
+                Debug.Log("Sem bateria!");
+            }
+            else
+            {
+                if (pegouLanterna == true)
+                {
+                    if (luzOff == true)
+                    {
+                        Luz.SetActive(true);
+                        luzOff = false;
+                    }
+                    else
+                    {
+                        Luz.SetActive(false);
+                        luzOff = true;
+                    }
+                }
+            }
+            
+        }
+
+        if(luzOff == false)
+        {
+            if(bateria <= 0 && tempoBateria <= 0)
+            {
+                Luz.SetActive(false);
+                luzOff = true;
+            }
+            else
+            {
+                tempoBateria--;
+
+                if (tempoBateria <= 0)
+                {
+                    bateria--;
+                }
+            }           
+        }
     }
 
     private void FixedUpdate()
@@ -98,6 +158,53 @@ public class PlayerController : MonoBehaviour
             rotCam = Mathf.Clamp(rotCam, -80, 80);
 
             cam.transform.localEulerAngles = new Vector3(-rotCam, 0, 0);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "Gerador")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Energia Ligada!");
+                portaAberta = true;
+            }
+
+        }
+
+        if (other.gameObject.name == "Porta")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if(portaAberta == true)
+                {
+                    Debug.Log("Porta Aberta!");
+                }
+                else
+                {
+                    Debug.Log("Ligue a energia primeiro!");
+                }
+                
+            }
+
+        }
+
+        if (other.gameObject.name == "LanternaFake")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                pegouLanterna = true;
+                Debug.Log("Pegou a lanterna!");
+            }
+        }
+
+        if (other.gameObject.name == "Bateria")
+        {
+            bateria++;
+            tempoBateria += 500;
+            Debug.Log("Você pegou uma bateria!");
+            other.gameObject.SetActive(false);
         }
     }
 }
