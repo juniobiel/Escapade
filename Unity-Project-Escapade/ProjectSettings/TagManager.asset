@@ -6,6 +6,9 @@ TagManager:
   tags:
   - porta
   - Gerador
+  - Bateria
+  - PortaSala
+  - PortaSala2
   layers:
   - Default
   - TransparentFX
