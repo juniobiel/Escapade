@@ -95,6 +95,6 @@ public class EnemyIA : MonoBehaviour
             agent.destination = wayPoints[wayPointIndex].position;
         }
 
-        SetMove(false, true, 2);
+        SetMove(false, true, 1);
     }
 }
