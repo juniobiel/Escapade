@@ -13,6 +13,12 @@ public class EnemyIA : MonoBehaviour
     Animator animator;
     NavMeshAgent agent;
 
+    //alvo
+    public Transform player;
+
+    //visao
+    public float angleVision = 90;
+
     [Header("PATRULHA")]
     public Transform wayPoint;
     public Transform[] wayPoints;
@@ -30,6 +36,8 @@ public class EnemyIA : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         wayPoints = wayPoint.GetComponentsInChildren<Transform>();
+
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
@@ -46,7 +54,7 @@ public class EnemyIA : MonoBehaviour
             break;
 
             case EnemyStates.Seguir:
-
+                SetSeguir();
             break;
 
             case EnemyStates.Correr:
@@ -96,5 +104,25 @@ public class EnemyIA : MonoBehaviour
         }
 
         SetMove(false, true, 1);
+    }
+
+    void SetSeguir()
+    {
+        
+    }
+
+    bool Visao()
+    {
+        Vector3 direction = player.position - transform.position;
+        float angle = Vector3.Angle(transform.forward, direction);
+
+        if(angle < angleVision)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

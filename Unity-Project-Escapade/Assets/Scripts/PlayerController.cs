@@ -163,6 +163,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag == "PortaSala")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Porta Aberta");
+                other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, -104, 0), transform.rotation,  Time.deltaTime);             
+            }
+
+        }
+
+        if (other.gameObject.tag == "PortaSala2")
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("Porta Aberta");
+                other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 104, 0), transform.rotation, Time.deltaTime);
+            }
+
+        }
+
         if (other.gameObject.name == "Gerador")
         {
             if (Input.GetKeyDown(KeyCode.E))
@@ -199,7 +219,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (other.gameObject.name == "Bateria")
+        if (other.gameObject.tag == "Bateria")
         {
             bateria++;
             tempoBateria += 500;
