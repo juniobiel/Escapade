@@ -14,10 +14,14 @@ public class EnemyIA : MonoBehaviour
     NavMeshAgent agent;
 
     //alvo
+    [Header("ALVO")]
     public Transform player;
 
     //visao
     public float angleVision = 90;
+    public float minDistanceVision = 10;
+    public Transform eye;
+    
 
     [Header("PATRULHA")]
     public Transform wayPoint;
@@ -38,6 +42,8 @@ public class EnemyIA : MonoBehaviour
         wayPoints = wayPoint.GetComponentsInChildren<Transform>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        eye = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -115,10 +121,26 @@ public class EnemyIA : MonoBehaviour
     {
         Vector3 direction = player.position - transform.position;
         float angle = Vector3.Angle(transform.forward, direction);
+        float distance = Vector3.Distance(player.position, transform.position);
+        RaycasHit hit;
 
-        if(angle < angleVision)
+        if(angle < angleVision && distance <= minDistanceVision)
         {
-            return true;
+            if(Physics.Linecast(eye.position, player.position, out hit))
+            {
+                if(hit.transform.tag == "Player")
+                {
+                    return true;
+                }
+                else 
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {

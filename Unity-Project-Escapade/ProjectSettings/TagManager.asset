@@ -9,6 +9,7 @@ TagManager:
   - Bateria
   - PortaSala
   - PortaSala2
+  - Hide
   layers:
   - Default
   - TransparentFX
