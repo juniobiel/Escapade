@@ -18,10 +18,12 @@ public class EnemyIA : MonoBehaviour
     public Transform player;
 
     //visao
+    [Header("VISÃO")]
     public float angleVision = 90;
     public float minDistanceVision = 10;
     public Transform eye;
-    
+    float vTimer = 0; //caso o inimigo veja
+    float vtAmount = 0.1f; //adiciona ao passar do tempo
 
     [Header("PATRULHA")]
     public Transform wayPoint;
@@ -42,8 +44,6 @@ public class EnemyIA : MonoBehaviour
         wayPoints = wayPoint.GetComponentsInChildren<Transform>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
-
-        eye = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -81,6 +81,8 @@ public class EnemyIA : MonoBehaviour
     void SetParado()
     {
         SetMove(false, true, 0);
+
+        VisionTimer();
     }
 
     void SetMove(bool rm, bool ag, float v)
@@ -110,6 +112,8 @@ public class EnemyIA : MonoBehaviour
         }
 
         SetMove(false, true, 1);
+
+        VisionTimer();
     }
 
     void SetSeguir()
@@ -117,12 +121,36 @@ public class EnemyIA : MonoBehaviour
         
     }
 
-    bool Visao()
+    void VisionTimer()
+    {
+        if (Ver())
+        {
+            vTimer += vtAmount;
+        }
+        else
+        {
+            vTimer -= vtAmount;
+        }
+
+        vTimer = Mathf.Clamp(vTimer, 0, 1); //limita os pontos min e máximo
+
+        if (vTimer >= 1) 
+        {
+            myStates = EnemyStates.Seguir;
+        }
+        if (vTimer <= 0)
+        {
+            myStates = EnemyStates.Parado;
+        }
+
+    }
+
+    bool Ver()
     {
         Vector3 direction = player.position - transform.position;
         float angle = Vector3.Angle(transform.forward, direction);
         float distance = Vector3.Distance(player.position, transform.position);
-        RaycasHit hit;
+        RaycastHit hit;
 
         if(angle < angleVision && distance <= minDistanceVision)
         {
