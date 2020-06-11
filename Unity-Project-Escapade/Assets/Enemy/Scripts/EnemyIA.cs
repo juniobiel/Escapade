@@ -22,8 +22,8 @@ public class EnemyIA : MonoBehaviour
     public float angleVision = 90;
     public float minDistanceVision = 10;
     public Transform eye;
-    float vTimer = 0; //caso o inimigo veja
-    float vtAmount = 0.1f; //adiciona ao passar do tempo
+    public float vTimer = 0; //caso o inimigo veja
+    public float vtAmount = 0.1f; //adiciona ao passar do tempo
 
     [Header("PATRULHA")]
     public Transform wayPoint;
@@ -80,7 +80,7 @@ public class EnemyIA : MonoBehaviour
 
     void SetParado()
     {
-        SetMove(false, true, 0);
+        SetMove(true, false, 0);
 
         VisionTimer();
     }
@@ -94,6 +94,9 @@ public class EnemyIA : MonoBehaviour
 
     void SetPatrulha()
     {
+        VisionTimer();
+        if(Ver()) return;
+
         if(wayPoint == null)
         {
             myStates = EnemyStates.Parado;
@@ -112,13 +115,11 @@ public class EnemyIA : MonoBehaviour
         }
 
         SetMove(false, true, 1);
-
-        VisionTimer();
     }
 
     void SetSeguir()
     {
-        
+        VisionTimer();
     }
 
     void VisionTimer()
@@ -126,6 +127,7 @@ public class EnemyIA : MonoBehaviour
         if (Ver())
         {
             vTimer += vtAmount;
+            //SetMove(true, false, 2);
         }
         else
         {
@@ -138,41 +140,41 @@ public class EnemyIA : MonoBehaviour
         {
             myStates = EnemyStates.Seguir;
         }
-        if (vTimer <= 0)
+        if (vTimer <= 0 && myStates == EnemyStates.Seguir)
         {
-            myStates = EnemyStates.Parado;
+            if( wayPoint == null )
+            {
+                myStates = EnemyStates.Parado;
+            }
+            else
+            {
+                myStates = EnemyStates.Patrulha;
+            }
+            
         }
 
     }
 
     bool Ver()
     {
-        Vector3 direction = player.position - transform.position;
-        float angle = Vector3.Angle(transform.forward, direction);
-        float distance = Vector3.Distance(player.position, transform.position);
+        Vector3 dir = player.position - transform.position;
+        float angle = Vector3.Angle(transform.forward, dir);
+        float dist = Vector3.Distance(player.position, transform.position);
         RaycastHit hit;
 
-        if(angle < angleVision && distance <= minDistanceVision)
+        if(angle < angleVision && dist <= minDistanceVision)
         {
             if(Physics.Linecast(eye.position, player.position, out hit))
             {
                 if(hit.transform.tag == "Player")
-                {
                     return true;
-                }
-                else 
-                {
-                    return false;
-                }
+
+                else return false;
             }
-            else
-            {
-                return false;
-            }
+            else return false;
+
         }
-        else
-        {
-            return false;
-        }
+        else return false;
+
     }
 }
