@@ -16,24 +16,16 @@ public class Hide : MonoBehaviour
 
     public float rayLength = 10;
 
-    //Vector3 meu1 = GameObject.Find("FPSController").transform.position;
-    //Vector3 meu2 = GameObject.Find("CameraHide").transform.position;
-
-
-    // Start is called before the first frame update
     void Start()
     {
         mainCamera.enabled = true;
         hidingCamera.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         RaycastHit hit;
         var fwd = transform.TransformDirection(Vector3.forward);
-
-        /*(transform.position, fwd, hit, rayLength)*/
 
         if (Physics.Raycast(transform.position, fwd, out hit, rayLength))
         {

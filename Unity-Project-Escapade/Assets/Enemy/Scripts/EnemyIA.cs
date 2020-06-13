@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyStates { Parado, Patrulha, Seguir, Correr }
+public enum EnemyStates { Parado, Patrulha, Seguir, Lutar }
 
 public class EnemyIA : MonoBehaviour
 {
@@ -29,6 +29,7 @@ public class EnemyIA : MonoBehaviour
     public Transform wayPoint;
     public Transform[] wayPoints;
     public float minDistance = 2;
+    public float maxDistance = 8;
     int wayPointIndex = 0;
     bool isClose = false;
 
@@ -63,7 +64,7 @@ public class EnemyIA : MonoBehaviour
                 SetSeguir();
             break;
 
-            case EnemyStates.Correr:
+            case EnemyStates.Lutar:
 
             break;
 
@@ -111,7 +112,8 @@ public class EnemyIA : MonoBehaviour
         }
         else
         {
-            agent.destination = wayPoints[wayPointIndex].position;
+            if(agent.enabled)
+                agent.destination = wayPoints[wayPointIndex].position;
         }
 
         SetMove(false, true, 1);
@@ -119,7 +121,17 @@ public class EnemyIA : MonoBehaviour
 
     void SetSeguir()
     {
-        VisionTimer();
+        
+        SetMove(false, true, 2);
+        agent.destination = player.position;
+        agent.speed = 3.0f;
+
+        float dist = Vector3.Distance(player.position, transform.position);
+
+        if(dist <= maxDistance)
+        {
+            myStates = EnemyStates.Seguir;
+        }
     }
 
     void VisionTimer()
