@@ -65,7 +65,7 @@ public class EnemyIA : MonoBehaviour
             break;
 
             case EnemyStates.Lutar:
-
+                SetLutar();
             break;
 
         }
@@ -190,3 +190,15 @@ public class EnemyIA : MonoBehaviour
 
     }
 }
+
+    void SetLutar()
+    {
+        float dist = Vector3.Distance(player.position, transform.position);
+
+        if(dist <= 1)
+        {
+            //voltar para o estado principal
+        }
+        
+    
+    }
