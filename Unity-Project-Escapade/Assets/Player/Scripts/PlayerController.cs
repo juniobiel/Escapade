@@ -10,8 +10,6 @@ public class PlayerController : MonoBehaviour
     public float RunSpeed;
     public float sensibility;
 
-    public bool portaAberta = false;
-
     [Header("Imports")]
     public Camera cam;
 
@@ -23,18 +21,29 @@ public class PlayerController : MonoBehaviour
     private Vector3 camRotation;
     private float rotCam;
 
-
-    public bool pegouLanterna = false;
+    [Header("Itens e objetos")]
+    //itens e objetos
     public GameObject lanterna;
     public GameObject Luz;
     public GameObject lanternaFake;
-    public bool luzOff = false;
-    public int bateria = 0;
-    public int tempoBateria = 0;
+    public bool luzOff;
+    public int bateria;
+    public int tempoBateria;
+    public float pecas;
+    public bool pegouLanterna;
+    public bool portaAberta;
+    public bool geradorLigado;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        pecas = 0;
+        tempoBateria = 0;
+        bateria = 0;
+        luzOff = false;
+        pegouLanterna = false;
+        portaAberta = false;
+        geradorLigado = false;
     }
 
     // Update is called once per frame
@@ -163,68 +172,84 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "PortaSala")
+
+        switch (other.gameObject.tag)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.Log("Porta Aberta");
-                other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, -104, 0), transform.rotation,  Time.deltaTime);             
-            }
-
-        }
-
-        if (other.gameObject.tag == "PortaSala2")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.Log("Porta Aberta");
-                other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 104, 0), transform.rotation, Time.deltaTime);
-            }
-
-        }
-
-        if (other.gameObject.name == "Gerador")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.Log("Energia Ligada!");
-                portaAberta = true;
-            }
-
-        }
-
-        if (other.gameObject.name == "Porta")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                if(portaAberta == true)
+            case "PortaSala":
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Debug.Log("Porta Aberta!");
+                    Debug.Log("Porta Aberta");
+                    other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, -104, 0), transform.rotation,  Time.deltaTime);             
+                }
+                break;
+
+            case "PortaSala2":
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Debug.Log("Porta Aberta");
+                    other.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 104, 0), transform.rotation, Time.deltaTime);
+                }
+                break;
+
+            case "Peca":
+
+                pecas++;
+                Debug.Log("Nova peça do gerador encontrada!");
+                this.gameObject.SetActive(false);
+
+                break;
+
+            case "Gerador":
+
+                if (pecas >= 5)
+                {
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        Debug.Log("Energia Ligada!");
+                        geradorLigado = true;
+                        portaAberta = true;
+                    }
                 }
                 else
                 {
-                    Debug.Log("Ligue a energia primeiro!");
+                    Debug.Log("São necessárias 5 peças, você possui " + pecas);
                 }
-                
-            }
 
-        }
+                break;
 
-        if (other.gameObject.name == "LanternaFake")
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                pegouLanterna = true;
-                Debug.Log("Pegou a lanterna!");
-            }
-        }
+            case "Porta":
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (portaAberta == true)
+                    {
+                        Debug.Log("Porta Aberta!");
+                    }
+                    else
+                    {
+                        Debug.Log("Ligue a energia primeiro!");
+                    }
 
-        if (other.gameObject.tag == "Bateria")
-        {
-            bateria++;
-            tempoBateria += 500;
-            Debug.Log("Você pegou uma bateria!");
-            other.gameObject.SetActive(false);
+                }
+
+                break;
+
+            case "LanterFake":
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    pegouLanterna = true;
+                    Debug.Log("Pegou a lanterna!");
+                }
+
+                break;
+
+            case "Bateria":
+                bateria++;
+                tempoBateria += 500;
+                Debug.Log("Você pegou uma bateria!");
+                other.gameObject.SetActive(false);
+
+                break;
         }
+        
     }
 }

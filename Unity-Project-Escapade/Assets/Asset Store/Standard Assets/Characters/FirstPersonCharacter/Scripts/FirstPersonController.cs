@@ -13,7 +13,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
     {
         public Inventory inventory;
 
-
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
         [SerializeField] private float m_RunSpeed;
@@ -259,7 +258,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
 
-            //MEU CODIGO
+
+            /*************************** -- MEU CODIGO -- ****************************/
+
             IInventoryItem item = hit.controller.GetComponent<IInventoryItem>();
 
             if (item != null)

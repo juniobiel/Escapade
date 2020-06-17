@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
+
 {
     private const int SLOTS = 5;
 
@@ -13,7 +14,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(IInventoryItem item)
     {
-        /*if(mItens.Count < SLOTS)
+        if(mItens.Count < SLOTS)
         {
             Collider collider = (item as MonoBehaviour).GetComponent<Collider>();
 
@@ -23,7 +24,7 @@ public class Inventory : MonoBehaviour
 
                 mItens.Add(item);
 
-                //item.OnPickup();
+                item.OnPickup();
 
 
                 if(ItemAdded != null)
@@ -31,7 +32,7 @@ public class Inventory : MonoBehaviour
                     ItemAdded(this, new InventoryEventsArgs(item));
                 }
             }
-        }*/
+        }
 
     }
 }

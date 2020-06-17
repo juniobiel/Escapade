@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public enum EnemyStates { Parado, Patrulha, Seguir, Lutar }
 
@@ -45,12 +46,13 @@ public class EnemyIA : MonoBehaviour
         wayPoints = wayPoint.GetComponentsInChildren<Transform>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch(myStates)
+        switch (myStates)
         {
             case EnemyStates.Parado:
                 SetParado();
@@ -69,6 +71,11 @@ public class EnemyIA : MonoBehaviour
             break;
 
         }
+
+        float dist = Vector3.Distance(player.position, gameObject.transform.position);
+
+        if (dist <= 2 && player.GetComponent<Hide>().isHiding == true)
+            SetPatrulha();
 
         AnimUpdate();
 
@@ -95,10 +102,11 @@ public class EnemyIA : MonoBehaviour
 
     void SetPatrulha()
     {
+        agent.speed = 1.5f;
         VisionTimer();
-        if(Ver()) return;
+        if (Ver()) return;
 
-        if(wayPoint == null)
+        if (wayPoint == null)
         {
             myStates = EnemyStates.Parado;
             return;
@@ -106,13 +114,13 @@ public class EnemyIA : MonoBehaviour
 
         float dis = Vector3.Distance(wayPoints[wayPointIndex].position, transform.position);
 
-        if( dis <= minDistance)
+        if (dis <= minDistance)
         {
             wayPointIndex = UnityEngine.Random.Range(0, wayPoints.Length);
         }
         else
         {
-            if(agent.enabled)
+            if (agent.enabled)
                 agent.destination = wayPoints[wayPointIndex].position;
         }
 
@@ -121,14 +129,14 @@ public class EnemyIA : MonoBehaviour
 
     void SetSeguir()
     {
-        
+
         SetMove(false, true, 2);
         agent.destination = player.position;
         agent.speed = 3.0f;
 
         float dist = Vector3.Distance(player.position, transform.position);
 
-        if(dist <= maxDistance)
+        if (dist <= maxDistance)
         {
             myStates = EnemyStates.Seguir;
         }
@@ -148,13 +156,13 @@ public class EnemyIA : MonoBehaviour
 
         vTimer = Mathf.Clamp(vTimer, 0, 1); //limita os pontos min e máximo
 
-        if (vTimer >= 1) 
+        if (vTimer >= 1)
         {
             myStates = EnemyStates.Seguir;
         }
         if (vTimer <= 0 && myStates == EnemyStates.Seguir)
         {
-            if( wayPoint == null )
+            if (wayPoint == null)
             {
                 myStates = EnemyStates.Parado;
             }
@@ -162,7 +170,7 @@ public class EnemyIA : MonoBehaviour
             {
                 myStates = EnemyStates.Patrulha;
             }
-            
+
         }
 
     }
@@ -174,11 +182,11 @@ public class EnemyIA : MonoBehaviour
         float dist = Vector3.Distance(player.position, transform.position);
         RaycastHit hit;
 
-        if(angle < angleVision && dist <= minDistanceVision)
+        if (angle < angleVision && dist <= minDistanceVision)
         {
-            if(Physics.Linecast(eye.position, player.position, out hit))
+            if (Physics.Linecast(eye.position, player.position, out hit))
             {
-                if(hit.transform.tag == "Player")
+                if (hit.transform.tag == "Player")
                     return true;
 
                 else return false;
@@ -189,16 +197,27 @@ public class EnemyIA : MonoBehaviour
         else return false;
 
     }
-}
 
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch(collision.gameObject.tag)
+        {
+            case "Player":
+
+                SetLutar();
+
+                SceneManager.LoadScene("GameOver", LoadSceneMode.Single);
+
+             break;
+
+        }
+    }
     void SetLutar()
     {
         float dist = Vector3.Distance(player.position, transform.position);
-
-        if(dist <= 1)
-        {
-            //voltar para o estado principal
-        }
         
-    
+        if(dist <= 1)
+            myStates = EnemyStates.Lutar;
     }
+}

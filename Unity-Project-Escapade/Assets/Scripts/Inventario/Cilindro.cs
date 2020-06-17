@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Objetos : MonoBehaviour //IInventoryItem
+public class Cilindro : MonoBehaviour, IInventoryItem
+
 {
-    
+
     public string Name
     {
         get
         {
-            return "Cubo";
+            return "Cilindro";
         }
     }
 
-    public Sprite _Image = null;
+    public Sprite _Image;
 
     public Sprite Image
     {
@@ -27,4 +28,5 @@ public class Objetos : MonoBehaviour //IInventoryItem
     {
         gameObject.SetActive(false);
     }
+    
 }

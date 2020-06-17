@@ -38,7 +38,7 @@ public class Hide : MonoBehaviour
                 {
 
                     //Disabled Player
-                    GameObject.Find("FPSController").GetComponent<FirstPersonController>().enabled = false;
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled = false;
                     //GameObject.Find("FirstPersonCharacter").GetComponent<MeshRenderer>().enabled = false;
 
                     //Change Camera
@@ -60,7 +60,7 @@ public class Hide : MonoBehaviour
             if (Input.GetKeyDown("e"))
             {
                 //Disabled Player
-                GameObject.Find("FPSController").GetComponent<FirstPersonController>().enabled = true;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled = true;
                 //GameObject.Find("FirstPersonCharacter").GetComponent<MeshRenderer>().enabled = true;
 
                 //Change Camera

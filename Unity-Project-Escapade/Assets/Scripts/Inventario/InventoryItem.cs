@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IInventoryItem {
+public interface IInventoryItem {
 
     string Name { get; }
 
+    //public aqui é meu
     Sprite Image { get; }
 
-    //void OnPickup();
+    void OnPickup();
 }
 
 public class InventoryEventsArgs : EventArgs
