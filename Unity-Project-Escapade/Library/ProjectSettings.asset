@@ -627,7 +627,7 @@ PlayerSettings:
   facebookStatus: 1
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
-  apiCompatibilityLevel: 6
+  apiCompatibilityLevel: 2
   cloudProjectId: 05331681-d01b-4a02-90d7-894ba6a78f06
   framebufferDepthMemorylessMode: 0
   projectName: Escapade

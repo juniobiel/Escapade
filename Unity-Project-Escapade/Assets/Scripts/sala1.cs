@@ -10,7 +10,7 @@ public class sala1 : MonoBehaviour
     public GameObject lampada;
     public GameObject chave;
     public GameObject porta;
-    public GameObject raioLuz;
+    //public GameObject raioLuz;
 
     Transform chaveX;
     public bool temChave = false;
@@ -33,7 +33,7 @@ public class sala1 : MonoBehaviour
     {
         chaveX = chave.GetComponent<Transform>();
 
-        if(luz == true)
+        /*if(luz == true)
         {
             cont++;
 
@@ -52,7 +52,7 @@ public class sala1 : MonoBehaviour
                 raioLuz.SetActive(false);
             }
 
-        }
+        }*/
 
     }
 
@@ -75,7 +75,7 @@ public class sala1 : MonoBehaviour
 
             temChave = true;
 
-            raioLuz.SetActive(true);
+            //raioLuz.SetActive(true);
             luz = true;
         }
 

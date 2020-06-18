@@ -38,8 +38,8 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pecas = 0;
-        tempoBateria = 0;
-        bateria = 0;
+        tempoBateria = 1000;
+        bateria = 1;
         luzOff = false;
         pegouLanterna = false;
         portaAberta = false;
@@ -122,23 +122,27 @@ public class PlayerController : MonoBehaviour
             
         }
 
-        if(luzOff == false)
+        if(pegouLanterna)
         {
-            if(bateria <= 0 && tempoBateria <= 0)
+            if (luzOff == false)
             {
-                Luz.SetActive(false);
-                luzOff = true;
-            }
-            else
-            {
-                tempoBateria--;
-
-                if (tempoBateria <= 0)
+                if (bateria <= 0 && tempoBateria <= 0)
                 {
-                    bateria--;
+                    Luz.SetActive(false);
+                    luzOff = true;
                 }
-            }           
+                else
+                {
+                    tempoBateria--;
+
+                    if (tempoBateria <= 0)
+                    {
+                        bateria--;
+                    }
+                }
+            }
         }
+        
     }
 
     private void FixedUpdate()
@@ -195,7 +199,7 @@ public class PlayerController : MonoBehaviour
 
                 pecas++;
                 Debug.Log("Nova peça do gerador encontrada!");
-                this.gameObject.SetActive(false);
+                other.gameObject.SetActive(false);
 
                 break;
 
@@ -207,7 +211,6 @@ public class PlayerController : MonoBehaviour
                     {
                         Debug.Log("Energia Ligada!");
                         geradorLigado = true;
-                        portaAberta = true;
                     }
                 }
                 else
@@ -233,7 +236,7 @@ public class PlayerController : MonoBehaviour
 
                 break;
 
-            case "LanterFake":
+            case "LanternaFake":
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     pegouLanterna = true;
@@ -248,6 +251,22 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Você pegou uma bateria!");
                 other.gameObject.SetActive(false);
 
+                break;
+
+            case "Saida":
+
+                if(Input.GetKey(KeyCode.E))
+                {
+                    if (geradorLigado)
+                    {
+                        Debug.Log("Você saiu!");
+                    }
+                    else
+                    {
+                        Debug.Log("Você deve ligar o gerador para fugir");
+                    }
+                }
+                
                 break;
         }
         
